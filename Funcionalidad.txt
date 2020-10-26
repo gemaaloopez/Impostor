@@ -1,0 +1,10 @@
+Funcionalidad:
+- Crear partida(num), se genera un código.
+- Unir a partida, se controla el máximo.
+- Abandonar partida.
+- Modificar partida.
+- Iniciar partida.
+- Asignar tareas a los usuarios.
+- Asignar el impostor.
+- Atacar.
+- Votaciones.
