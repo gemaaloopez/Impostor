@@ -136,8 +136,7 @@ function Partida(num,owner,codigo){
 			}
 		}
 		return i
-	}
-
+	} .numIm
 
 	this.vota=function(nick){
 		this.fase.vota(nick, this);
@@ -227,17 +226,17 @@ function Partida(num,owner,codigo){
 		if(this.gananLosImpostores()){
 			this.finDeLaPartidaDelImpostor();
 		}
-		else if(this.gananLasPersonas()){
-			this.finDeLaPartidaDePersonas();
+		else if(this.gananLosCiudadanos()){
+			this.finDeLaPartidaDeCiudadanos();
 		}
 		else{
 			this.fase = new Jugando();
 		}
 	}
 
-	this.finDeLaPartidaDePersonas=function(){
+	this.finDeLaPartidaDeCiudadanos=function(){
 		this.fase = new Final();
-		this.fase.ganador = "persona";
+		this.fase.ganador = "ciudadanos";
 	}
 	this.finDeLaPartidaDelImpostor=function(){
 		this.fase = new Final();
@@ -331,6 +330,7 @@ function Jugando(){
 
 function Final(){
 	this.nombre="final";
+	this.ganadores="ninguno";
 	this.agregarUsuario=function(nick,partida){
 		console.log("La partida ha terminado");
 	}
