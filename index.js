@@ -39,7 +39,12 @@ app.get('/unirAPartida/:codigo/:nick', function(request, response){
 	response.send({res:res});
 });
 
-server.listen(app.get('port'), function () {
+app.get("/listaPartidas",function(request,response){
+    var lista=juego.listaPartidas();
+    response.send(lista);
+});
+
+server.listen(app.ge('port'), function () {
 	console.log('Node esta escuchando en el puerto', app.get('port'));
 });
 

@@ -243,6 +243,7 @@ function Partida(num,owner,codigo){
 		this.fase.ganador = "impostor";
 	}
 
+
 	this.agregarUsuario(owner);
 }
 
@@ -359,7 +360,7 @@ function Final(){
 function Usuario(nick,juego){
 	this.nick=nick;
 	this.juego=juego;
-	this.skips = 0;
+	this.skip = false;
 	this.votos = 0;
 	this.partida;
 	this.estado = new Vivo();
@@ -378,11 +379,12 @@ function Usuario(nick,juego){
 		
 		}
 	}
-	this.unirAPartida=function(cod){
-		this.partida = this.juego.unirAPartida(cod, this.nick);
-	}
+	//this.unirAPartida=function(cod){
+	//	this.partida = this.juego.unirAPartida(cod, this.nick);
+	//}
+
 	this.atacar=function(nick){
-		if(this.impostor){
+		if(this.impostor && nick!=this.nick){
 			this.estado.atacar(nick, this.partida);
 		}
 	}
@@ -391,6 +393,21 @@ function Usuario(nick,juego){
 	}
 	this.vota=function(nick){
 		if(nick!= this.nick) this.estado.vota(nick, this.partida, this);
+	}
+	this.haVotado=function(){
+		this.estado.haVotado(this);
+	}
+	this.empezarVotacion=function(){
+		this.estado.empezarVotacion(this);
+	}
+	this.mandarVotacion=function(){
+		this.partida.mandarVotacion();
+	}
+	this.skipr=function(){
+		this.partida.fase.skipr(this);
+	}
+	this.puedeSkipr=function(){
+		this.skip = true;
 	}
 }
 
@@ -409,7 +426,14 @@ function Vivo(){
 		partida.votos++;
 	}
 	this.mandarVotacion=function(usuario){
-		usuario.permiteMandarVotacion(this);
+		usuario.mandarVotacion(this);
+	}
+	this.empezarVotacion=function(){
+		this.estado.empezarVotacion(this);
+	}
+
+	this.skipr=function(usr){
+		usr.puedeSkipr();
 	}
 
 }
@@ -431,7 +455,11 @@ function Muerto(){
 	this.mandarVotacion=function(usuario){
 		// muerto no puede hacer nada
 	}
+	this.skipr=function(usr){
+
+	}
 }
+
 function Votacion(){
 	this.nombre="votacion";
 	this.agregarUsuario=function(nick,partida){
@@ -459,6 +487,7 @@ function Votacion(){
 		usr.estado.skipr(usr);
 	}
 
+
 }
 
 function randomInt(low, high) {
@@ -473,6 +502,9 @@ function numeroValido(num) {
 	}
 }
 
+
+/*
+
 function inicio(){
 	juego=new Juego();
 	var usr=new Usuario("pepe",juego);
@@ -483,8 +515,9 @@ function inicio(){
 		juego.unirAPartida(codigo,"luisito");
 		usr.iniciarPartida();
 	}
+	*/
 }
 
 module.exports.Juego=Juego;
 module.exports.Usuario=Usuario;
-module.exports.Inicial;
+module.exports.Inicial=Inicial;

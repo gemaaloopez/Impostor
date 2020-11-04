@@ -196,9 +196,79 @@ describe("El juego del impostor", function() {
 				impostor.atacar(ciudadanos[0].nick); 
 				expect(partida.usuarios[ciudadanos[0].nick].estado.nombre).toEqual("muerto");
 			});
+			it("Se realizan votaciones, ninguno vota, y nadie muere, se continua la jugada", function() {
+				expect(partida.fase.nombre).toEqual("jugando");
+				expect(partida.usuarios["pepe"].estado.nombre).toEqual("vivo");
+				expect(partida.usuarios["gema"].estado.nombre).toEqual("vivo");
+				expect(partida.usuarios["paloma"].estado.nombre).toEqual("vivo");
+				expect(partida.usuarios["vero"].estado.nombre).toEqual("vivo");
+				partida.empezarVotacion();
+				expect(partida.fase.nombre).toEqual("votacion");
+				partida.usuarios["pepe"].skipr();
+				expect(partida.usuarios["pepe"].skip).toBe(true);
+				partida.usuarios["gema"].skipr();
+				expect(partida.usuarios["gema"].skip).toBe(true);
+				partida.usuarios["paloma"].skipr();
+				expect(partida.usuarios["paloma"].skip).toBe(true);
+				partida.usuarios["vero"].skipr();
+				expect(partida.usuarios["vero"].skip).toBe(true);
+				expect(partida.numImpostoresVivos()).toEqual(1);
+				expect(partida.numCiudadanosVivos()).toEqual(3);
+				expect(partida.gananLosCiudadanos()).toBe(false);
+				expect(partida.gananLosImpostores()).toBe(false);
+				partida.quitarAlMasVotado();
+				expect(partida.numImpostoresVivos()).toEqual(1);
+				expect(partida.numCiudadanosVivos()).toEqual(3);
+				expect(partida.gananLosCiudadanos()).toBe(false);
+				expect(partida.gananLosImpostores()).toBe(false);
+				expect(partida.fase.nombre).toEqual("jugando");
+				expect(partida.usuarios["pepe"].skip).toBe(false);
+				expect(partida.usuarios["gema"].skip).toBe(false);
+				expect(partida.usuarios["paloma"].skip).toBe(false);
+				expect(partida.usuarios["vero"].skip).toBe(false);
+				expect(partida.usuarios["pepe"].estado.nombre).toEqual("vivo");
+				expect(partida.usuarios["gema"].estado.nombre).toEqual("vivo");
+				expect(partida.usuarios["paloma"].estado.nombre).toEqual("vivo");
+				expect(partida.usuarios["vero"].estado.nombre).toEqual("vivo");
+			});
+
+			it("Se atrapa al impostor, la partida acabará y ganan los ciudadanos", function() {
+				expect(partida.fase.nombre).toEqual("jugando");
+				expect(partida.usuarios["pepe"].estado.nombre).toEqual("vivo");
+				expect(partida.usuarios["gema"].estado.nombre).toEqual("vivo");
+				expect(partida.usuarios["paloma"].estado.nombre).toEqual("vivo");
+				expect(partida.usuarios["vero"].estado.nombre).toEqual("vivo");
+				partida.empezarVotacion();
+				expect(partida.fase.nombre).toEqual("votacion");
+				ciudadanos[0].vota(impostor.nick);
+				expect(ciudadanos[0].skip).toBe(false);
+				expect(ciudadanos[0].haVotado).toBe(true);
+				expect(impostor.votos).toEqual(1);
+				ciudadanos[1].vota(impostor.nick);
+				expect(ciudadanos[1].haVotado).toBe(true);
+				expect(ciudadanos[1].skip).toBe(false);
+				expect(impostor.votos).toEqual(2);
+				ciudadanos[2].vota(impostor.nick);
+				expect(ciudadanos[2].skip).toBe(false);
+				expect(ciudadanos[2].haVotado).toBe(true);
+				expect(impostor.votos).toEqual(3);
+				expect(partida.numImpostoresVivos()).toEqual(1);
+				expect(partida.numCiudadanosVivos()).toEqual(3);
+				expect(partida.gananLosCiudadanos()).toBe(false);
+				expect(partida.gananLosImpostores()).toBe(false);
+				partida.quitarAlMasVotado();
+				expect(partida.numImpostoresVivos()).toEqual(0);
+				expect(partida.numCiudadanosVivos()).toEqual(3);
+				expect(partida.gananLosCiudadanos()).toBe(true);
+				expect(partida.gananLosImpostores()).toBe(false);
+				expect(partida.fase.nombre).toEqual("final");
+				expect(partida.fase.ganadores).toEqual("ciudadanos");
+				expect(impostor.estado.nombre).toEqual("muerto");
+			});
+		});	
 
 		 //Pendiente pruebas de votaciones 
 		 
 		});
 	}); 
-});s
+});
