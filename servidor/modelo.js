@@ -242,6 +242,23 @@ function Partida(num,owner,codigo){
 		this.fase = new Final();
 		this.fase.ganador = "impostor";
 	}
+	this.comprobarVotacion=function(){
+		let elegido=this.jugadorMasVotado();
+		if (elegido && elegido.votos>this.numeroSkips()){
+			elegido.esAtacado();
+		}
+	}
+	this.obtenerHuecos=function(){
+		return this.maximo - Object.keys(this.usuarios).length
+	}
+	this.devuelvePartidasLibres=function(){
+		this.fase.devolverPartidasLibres(this);
+	}
+	this.puedeDevolverPartidasLibres=function(){
+		if(this.obtenerHuecos() > 0){
+			return this
+		}
+	}
 
 
 	this.agregarUsuario(owner);
@@ -277,6 +294,9 @@ function Inicial(){
 	this.skipr=function(usr){
 
 	}
+	this.devuelvePartidasLibres=function(partida){
+		partida.puedeDevolverPartidasLibres();
+	}
 
 }
 
@@ -298,6 +318,21 @@ function Completado(){
 		
 	}
 	this.atacar=function(nick,partida){
+	}
+	this.vota=function(nick, partida){
+
+	}
+	this.empezarVotacion=function(partida){
+
+	}
+	this.quitarAlMasVotado=function(partida){
+
+	}
+	this.skipr=function(usr){
+
+	}
+	this.devuelvePartidasLibres=function(partida){
+		partida.puedeDevolverPartidasLibres();
 	}
 }
 
@@ -325,6 +360,9 @@ function Jugando(){
 	}
 	this.skipr=function(usr){
 
+	}
+	this.devuelvePartidasLibres=function(partida){
+		
 	}
 
 }
@@ -354,6 +392,9 @@ function Final(){
 	this.skipr=function(usr){
 
 	}
+	this.devuelvePartidasLibres=function(partida){
+	
+	}
 
 }
 
@@ -366,6 +407,7 @@ function Usuario(nick,juego){
 	this.estado = new Vivo();
 	this.impostor=false;
 	this.encargo="ninguno";
+	
 	this.crearPartida=function(num){
 		return this.juego.crearPartida(num,this);
 	}
@@ -485,6 +527,9 @@ function Votacion(){
 	}
 	this.skipr=function(usr){
 		usr.estado.skipr(usr);
+	}
+	this.devuelvePartidasLibres=function(partida){
+		
 	}
 
 
