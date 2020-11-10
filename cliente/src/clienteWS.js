@@ -30,8 +30,23 @@ function ClienteWS(){
 		});
 		this.socket.on('partidaIniciada',function(fase){
 			console.log("Partida en fase: "+fase);
-		})
+		});
+		this.socket.on('recibirListaPartidasDisponibles',function(lista){
+			console.log(lista);
+		});
+		this.socket.on('recibirListaPartidas',function(lista){
+			console.log(lista);
+		});
 	}
 
 	this.ini();
+}
+function pruebasWS(codigo){
+	var ws2=new ClienteWS();
+	var ws3=new ClienteWS();
+	var ws4=new ClienteWS();
+
+	ws2.unirAPartida(codigo,"palomi");
+	ws3.unirAPartida(codigo,"palomita");
+	ws4.unirAPartida(codigo,"pa");
 }
