@@ -32,9 +32,18 @@ function ServidorWS(){
 
 		    socket.on('iniciarPartida',function(nick,codigo){
 		    	//iniciar partida ToDo
-		    	//controlar si nick es el owner
-		    	//cli.enviarATodos(socket,codigo,"partidaIniciada",fase);
-		    })
+				//controlar si nick es el owner de la partida desde modelo.js
+				var fase = juego.partidas[codigo].usuarios[nick].iniciarPartida();
+				cli.enviarATodos(io,codigo,"partidaIniciada",fase);   
+		    });
+		    socket.on('listaPartidasDisponibles', function() {
+				var lista = juego.listarPartidasDisponibles();
+				cli.enviarRemitente(socket,"recibirListaPartidasDisponibles", lista);     		        
+			});
+			socket.on('listaPartidas', function() {
+				var lista = juego.listarPartidas();
+				cli.enviarRemitente(socket,"recibirListaPartidas", lista);     		        
+			});
 		});
 	}
 	
