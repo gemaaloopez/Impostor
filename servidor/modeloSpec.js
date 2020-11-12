@@ -267,8 +267,116 @@ describe("El juego del impostor", function() {
 			});
 		});	
 
-		 //Pendiente pruebas de votaciones 
+		describe("las votaciones",function(){
+			beforeEach(function(){
+				juego.unirAPartida(codigo, "Jose");
+				juego.unirAPartida(codigo, "Pedro");
+				juego.unirAPartida(codigo, "Antonio");
+				juego.iniciarPartida(codigo, nick);
+
+			});
+
+			it("todos skipean",function(){
+				var partida=juego.partidas[codigo];
+				juego.mandarVotacion(codigo, nick);
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.saltarVoto(codigo, nick);
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.saltarVoto(codigo, "Jose");
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.saltarVoto(codigo, "Pedro");
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.saltarVoto(codigo, "Antonio");
+				expect(partida.fase.nombre).toEqual("jugando");
+			});
+			it("Se vota y mata a un inocente",function(){
+				var partida=juego.partidas[codigo];
+				juego.mandarVotacion(codigo, nick);
+				partida.usuarios[nick].impostor=true;
+				partida.usuarios["Jose"].impostor=false;
+				partida.usuarios["Pedro"].impostor=false;
+				partida.usuarios["Antonio"].impostor=false;
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.votar(codigo, nick, "Antonio");
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.votar(codigo, "Jose", "Antonio");
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.votar(codigo, "Pedro", "Antonio");
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.votar(codigo, "Antonio", "Antonio");
+				expect(partida.usuarios["Antonio"].estado.nombre).toEqual("muerto");
+				expect(partida.fase.nombre).toEqual("jugando");
+			});
+			it("Ataca el impostor y mata a todos",function(){
+				var partida=juego.partidas[codigo];
+				partida.usuarios[nick].impostor=true;
+				partida.usuarios["Jose"].impostor=false;
+				partida.usuarios["Pedro"].impostor=false;
+				partida.usuarios["Antonio"].impostor=false;
+				expect(partida.fase.nombre).toEqual("jugando");
+				juego.atacar(codigo, nick, "Jose");
+				expect(partida.usuarios["Jose"].estado.nombre).toEqual("muerto");
+				expect(partida.fase.nombre).toEqual("jugando");
+				juego.atacar(codigo, nick, "Pedro");
+				expect(partida.usuarios["Pedro"].estado.nombre).toEqual("muerto");
+				expect(partida.fase.nombre).toEqual("final");
+				expect(partida.fase.ganadores).toEqual("impostores");
+			});
+			it("Se vota y mata a un impostor, la partida acaba",function(){
+				var partida=juego.partidas[codigo];
+				juego.mandarVotacion(codigo, nick);
+				partida.usuarios[nick].impostor=true;
+				partida.usuarios["Jose"].impostor=false;
+				partida.usuarios["Pedro"].impostor=false;
+				partida.usuarios["Antonio"].impostor=false;
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.votar(codigo, nick, nick);
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.votar(codigo, "Jose", nick);
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.votar(codigo, "Pedro", nick);
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.votar(codigo, "Antonio", nick);
+				expect(partida.usuarios[nick].estado.nombre).toEqual("muerto");
+				expect(partida.fase.nombre).toEqual("final");
+				expect(partida.fase.ganadores).toEqual("ciudadanos");
+			});
+			it("Se vota a los inocentes y gana la partida el impostor",function(){
+				var partida=juego.partidas[codigo];
+				juego.mandarVotacion(codigo, nick);
+				partida.usuarios[nick].impostor=true;
+				partida.usuarios["Jose"].impostor=false;
+				partida.usuarios["Pedro"].impostor=false;
+				partida.usuarios["Antonio"].impostor=false;
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.votar(codigo, nick, "Pedro");
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.votar(codigo, "Jose", "Pedro");
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.votar(codigo, "Pedro", "Pedro");
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.votar(codigo, "Antonio", "Pedro");
+				expect(partida.usuarios["Pedro"].estado.nombre).toEqual("muerto");
+				expect(partida.fase.nombre).toEqual("jugando");
+				juego.mandarVotacion(codigo, nick);
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.votar(codigo, nick, "Antonio");
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.votar(codigo, "Jose", "Antonio");
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.votar(codigo, "Pedro", "Antonio");
+				expect(partida.fase.nombre).toEqual("votacion");
+				juego.votar(codigo, "Antonio", "Antonio");
+				expect(partida.todosHanVotado()).toBe(true);
+				expect(partida.elegido).toEqual("Antonio");
+				expect(partida.usuarios["Antonio"].estado.nombre).toEqual("muerto");
+				expect(partida.fase.nombre).toEqual("final");
+				expect(partida.fase.ganadores).toEqual("impostores");
+			});
+			
+		})
+
+		
 		 
-		});
-	}); 
-});
+	});
+})

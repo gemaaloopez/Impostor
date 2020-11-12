@@ -23,6 +23,7 @@ this.crearPartida=function(nick,num,callback){
     		console.log(data);
 		});
 	}
+}	
 
 	function pruebas(){
 	var codigo=undefined;

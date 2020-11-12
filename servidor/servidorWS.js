@@ -44,6 +44,44 @@ function ServidorWS(){
 				var lista = juego.listarPartidas();
 				cli.enviarRemitente(socket,"recibirListaPartidas", lista);     		        
 			});
+			socket.on('mandarVotacion', function(codigo, nick) {
+				juego.mandarVotacion(codigo,nick);
+				var fase=juego.partidas[codigo].fase.nombre;
+				cli.enviarATodos(io,codigo,"votacion",fase);
+			});
+			socket.on('saltarVoto', function(codigo, nick) {
+				var partida=juego.partidas[codigo];
+				juego.saltarVoto(codigo,nick);
+				if(partida.todosHanVotado()){
+					var data={"elegido":partida.elegido,"fase":partida.fase.nombre};
+					cli.enviarATodos(io,codigo,"finalVotacion",data);
+					//partida.reiniciarContadores();
+				}
+				else{
+					//se envia la  lista de los que hayan votado
+					cli.enviarATodos(io,codigo,"haVotado",partida.listaHanVotado());
+				}
+			});
+			socket.on('votar', function(codigo, nick, sospechoso) {
+				var partida=juego.partidas[codigo];
+				juego.votar(codigo,nick,sospechoso);
+				if(partida.todosHanVotado()){
+					var data={"elegido":partida.elegido,"fase":partida.fase.nombre};
+					cli.enviarATodos(io,codigo,"finalVotacion",data);
+				}
+				else{
+					cli.enviarATodos(io,codigo,"haVotado",partida.listaHanVotado());
+				}
+			});
+			socket.on('obtenerEncargo', function(codigo, nick) {
+				cli.enviarRemitente(socket,"recibirEncargo", juego.obtenerEncargo(codigo,nick));
+			});
+			socket.on('atacar', function(codigo, nick, atacado) {
+				juego.atacar(codigo, nick, atacado);
+				var usr_atacado=juego.partidas[codigo].obtenerUsuario(atacado)
+				var data={"Atacado":atacado,"estado":usr_atacado.estado.nombre};
+				cli.enviarRemitente(socket,"atacado", data);
+			});
 		});
 	}
 	
