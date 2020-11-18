@@ -76,7 +76,10 @@ function ClienteWS(){
 		this.socket.on('recibirEncargo',function(data){
 			console.log(data);
 		});
-		this.socket.on('atacado',function(data){
+		this.socket.on('muereInocente',function(data){
+			console.log(data);
+		});
+		this.socket.on('final',function(data){
 			console.log(data);
 		});
 	}
@@ -94,15 +97,24 @@ function pruebasWS(codigo){
 	ws3.unirAPartida(codigo,"palomita");
 	ws4.unirAPartida(codigo,"pa");
 }
+
 function saltarVotos(){
 	ws.saltarVoto();
 	ws2.saltarVoto();
 	ws3.saltarVoto();
 	ws4.saltarVoto();
 }
+
 function votar(){
 	ws.votar("palomi");
 	ws2.votar("palomi");
 	ws3.votar("palomi");
 	ws4.votar("palomi");
+}
+
+function obtenerEncargos(){
+	ws.obtenerEncargo();
+	ws2.obtenerEncargo();
+	ws3.obtenerEncargo();
+	ws4.obtenerEncargo();
 }
