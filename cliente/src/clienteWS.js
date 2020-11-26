@@ -82,6 +82,10 @@ function ClienteWS(){
 		this.socket.on('final',function(data){
 			console.log(data);
 		});
+		this.socket.on('recibirListaParticipantes',function(lista){
+			console.log(lista);
+			cw.mostrarParticipantes(lista);
+		});
 	}
 
 	this.ini();
