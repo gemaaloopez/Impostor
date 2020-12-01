@@ -60,7 +60,7 @@ function ClienteWS(){
 		});
 		this.socket.on('recibirListaPartidasDisponibles',function(lista){
 			console.log(lista);
-		});
+		});git p
 		this.socket.on('recibirListaPartidas',function(lista){
 			console.log(lista);
 		});

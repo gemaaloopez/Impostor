@@ -103,6 +103,14 @@ function Juego(){
 		//usr=this.partida[codigo].obtenerUsuario(nick);
 		usr.atacar(atacado);
 	}
+	this.listarParticipantes=function(codigo){
+		var lista = [];
+		var partida = this.partidas[codigo];
+		if (partida){
+			lista = partida.devolverNicks();
+		}
+		return lista
+	}
 
 
 }
@@ -358,6 +366,13 @@ function Partida(num,owner,codigo){
 			if(this.usuarios[key].estado.nombre=="vivo" && this.usuarios[key].haVotado){
 				lista.push(key);
 			}
+		}
+		return lista;
+	}
+	this.devolverNicks=function(){
+		var lista=[];
+		for(var key in this.usuarios){
+			lista.push({"nick":key});
 		}
 		return lista;
 	}
