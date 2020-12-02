@@ -40,6 +40,9 @@ function ClienteWS(){
 	this.atacar=function(atacado){
 		this.socket.emit("atacar", this.codigo, this.nick, atacado);
 	}
+	this.listarParticipantes=function(){
+		this.socket.emit("listarParticipantes", this.codigo);
+	}
 	//servidor WS dentro del cliente
 	this.lanzarSocketSrv=function(){
 		var cli=this;
@@ -57,6 +60,9 @@ function ClienteWS(){
 		});
 		this.socket.on('partidaIniciada',function(fase){
 			console.log("Partida en fase: "+fase);
+		});
+		this.socket.on('esperando',function(fase){
+			console.log("esperando: "+fase);
 		});
 		this.socket.on('recibirListaPartidasDisponibles',function(lista){
 			console.log(lista);

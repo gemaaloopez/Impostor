@@ -37,7 +37,7 @@ function ControlWeb($){
 	this.mostrarEsperandoRival=function(){
 		$('#mER').remove();
 		var cadena="<div id='mER'>";
-		cadena=cadena+"<img src='cliente/img/waitingS.gif' class='img-responsive center-block'>";
+		cadena=cadena+"<img src='cliente/img/loading.gif' class='img-responsive center-block'>";
 		cadena=cadena+"</div>";
 		this.limpiar();
 		$('#esperando').append(cadena);
@@ -115,5 +115,8 @@ function ControlWeb($){
 	this.actualizarJugadores=function(){
 		ws.listarParticipantes();
 	}
-
+	this.limpiarLog=function(){
+		$('#esperando').remove();
+		$('#uniendo').remove();
+	}
 }

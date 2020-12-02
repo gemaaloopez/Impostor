@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/gemaaloopez/Impostor#readme",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "express": "^4.17.1",
+    "jasmine-node": "^3.0.0",
     "lodash": "^4.17.20"
   }
 }
