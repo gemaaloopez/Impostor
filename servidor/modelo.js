@@ -17,7 +17,7 @@ function Juego(){
 		if(numeroValido(num)){
 			let codigo=this.obtenerCodigo();
 				if (!this.partidas[codigo]){
-					this.partidas[codigo]=new Partida(num,owner.nick,codigo);
+					this.partidas[codigo]=new Partida(num,owner.nick,codigo,this);
 					owner.partida=this.partidas[codigo];
 				}
 			return codigo;
@@ -166,6 +166,7 @@ function Partida(num,owner,codigo, juego){
 		if (!this.comprobarMinimo()){
 			this.fase=new Inicial();
 		}
+		console.log("PP " +this.juego);
 		if (this.numJugadores()<=0){
 			this.juego.eliminarPartida(this.codigo);
 		}
@@ -299,7 +300,7 @@ function Partida(num,owner,codigo, juego){
 				ganadorVotacion.esAtacado();
 		}
 	}
-	this.reiniciarContador=function(){
+	this.reiniciarContadores=function(){
 		this.elegido="No hay nadie elegido"
 		for(var usr in this.usuarios){
 				if (this.usuarios[usr].estado.nombre == "vivo"){

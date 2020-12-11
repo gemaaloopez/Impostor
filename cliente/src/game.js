@@ -30,13 +30,14 @@ function lanzarJuego(){
   let game;// = new Phaser.Game(config);
   let cursors;
   let player;
-  let player2;
+  //let player2;
   let jugadores=[];
   let showDebug = false;
   let camera;
   let worldLayer;
   let map;
   let crear;
+  var spawnPoint;
   let recursos=[{id:0,nombre:"ana"},{id:3,nombre:"pepe"},{id:6,nombre:"tom"},{id:8,nombre:"rayo"}];
 
   function preload() {
@@ -76,7 +77,7 @@ function lanzarJuego(){
 
     // Object layers in Tiled let you embed extra info into a map - like a spawn point or custom
     // collision shapes. In the tmx file, there's an object layer with a point named "Spawn Point"
-    const spawnPoint = map.findObject("Objects", obj => obj.name === "Spawn Point");
+    spawnPoint = map.findObject("Objects", obj => obj.name === "Spawn Point");
 
     // Create a sprite with physics enabled via the physics system. The image used for the sprite has
     // a bit of whitespace, so I'm using setSize & setOffset to control the size of the player's body.
@@ -187,6 +188,17 @@ function lanzarJuego(){
         repeat: -1
       });
       anims3.create({
+         key: "pepe-left-walk",
+        frames: anims.generateFrameNames("varios", {
+          //prefix: "misa-left-walk.",
+          start: 39,
+          end: 41,
+          //zeroPad: 3
+        }),
+        //frameRate: 10,
+        repeat: -1
+      });
+      anims3.create({
         key: "pepe-right-walk",
         frames: anims.generateFrameNames("varios", {
           //prefix: "misa-left-walk.",
@@ -219,14 +231,105 @@ function lanzarJuego(){
         //frameRate: 10,
         repeat: -1
       });
+       const anims4 = crear.anims;
+      anims4.create({
+        key: "tom-left-walk",
+        frames: anims.generateFrameNames("varios", {
+          //prefix: "misa-left-walk.",
+          start: 39,
+          end: 41,
+          //zeroPad: 3
+        }),
+        //frameRate: 10,
+        repeat: -1
+      });
+      anims4.create({
+        key: "tom-right-walk",
+        frames: anims.generateFrameNames("varios", {
+          //prefix: "misa-left-walk.",
+          start: 15,
+          end: 17,
+          //zeroPad: 3
+        }),
+        //frameRate: 10,
+        repeat: -1
+      });
+      anims4.create({
+        key: "tom-front-walk",
+        frames: anims.generateFrameNames("varios", {
+          //prefix: "misa-left-walk.",
+          start: 27,
+          end: 29,
+          //zeroPad: 3
+        }),
+        //frameRate: 10,
+        repeat: -1
+      });
+      anims4.create({
+        key: "tom-back-walk",
+        frames: anims.generateFrameNames("varios", {
+          //prefix: "misa-left-walk.",
+          start: 3,
+          end: 5,
+          //zeroPad: 3
+        }),
+        //frameRate: 10,
+        repeat: -1
+      });
+
+      const anims5 = crear.anims;
+      anims5.create({
+        key: "rayo-left-walk",
+        frames: anims.generateFrameNames("varios", {
+          //prefix: "misa-left-walk.",
+          start: 39,
+          end: 41,
+          //zeroPad: 3
+        }),
+        //frameRate: 10,
+        repeat: -1
+      });
+      anims5.create({
+        key: "rayo-right-walk",
+        frames: anims.generateFrameNames("varios", {
+          //prefix: "misa-left-walk.",
+          start: 15,
+          end: 17,
+          //zeroPad: 3
+        }),
+        //frameRate: 10,
+        repeat: -1
+      });
+      anims5.create({
+        key: "rayo-front-walk",
+        frames: anims.generateFrameNames("varios", {
+          //prefix: "misa-left-walk.",
+          start: 27,
+          end: 29,
+          //zeroPad: 3
+        }),
+        //frameRate: 10,
+        repeat: -1
+      });
+      anims5.create({
+        key: "rayo-back-walk",
+        frames: anims.generateFrameNames("varios", {
+          //prefix: "misa-left-walk.",
+          start: 3,
+          end: 5,
+          //zeroPad: 3
+        }),
+        //frameRate: 10,
+        repeat: -1
+      });
 
     // const camera = this.cameras.main;
     // camera.startFollow(player);
     // camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
     cursors = crear.input.keyboard.createCursorKeys();
-    lanzarJugador(spawnPoint,1);
-
+    lanzarJugador(ws.numJugador);
+    ws.estoyDentro();
     // Help text that has a "fixed" position on the screen
     // this.add
     //   .text(16, 16, 'Arrow keys to move\nPress "D" to show hitboxes', {
@@ -278,17 +381,73 @@ function lanzarJuego(){
 
   }
 
-  function lanzarJugadorRemoto(spawnPoint,id){
-    
-    jugadores[nick]=crear.physics.add.sprite(spawnPoint.x+15, spawnPoint.y,"varios",id);   
-    crear.physics.add.collider(player2, worldLayer);
+  function lanzarJugadorRemoto(nick, numJugador){
+    var frame = recursos[numJugador].frame;
+    jugadores[nick]=crear.physics.add.sprite(spawnPoint.x+15*numJugador, spawnPoint.y,"varios",frame);   
+    crear.physics.add.collider(jugadores[nick], worldLayer);
+  }
+    function mover(nick,x,y){
+    var remoto = jugadores[nick];
+    if(remoto){
+      remoto.setX(x);
+      remoto.setY(y);
+    }
   }
 
-  function update(time, delta) {
+  function moverRemoto(direccion,nick,numJugador){
+    var remoto = jugadores[nick];
     const speed = 175;
     const prevVelocity = player.body.velocity.clone();
 
-    const nombre=recursos[1].nombre;
+    const nombre=recursos[numJugador].sprite;
+
+    // Stop any previous movement from the last frame
+    remoto.body.setVelocity(0);
+    //player2.body.setVelocity(0);
+
+    // Horizontal movement
+    if (direccion == "left") {
+      remoto.body.setVelocityX(-speed);
+    } else if (direccion == "right") {
+      remoto.body.setVelocityX(speed);
+    }
+
+    // Vertical movement
+    if (direccion == "up") {
+      remoto.body.setVelocityY(-speed);
+    } else if (direccion == "down") {
+      remoto.body.setVelocityY(speed);
+    }
+
+    // Normalize and scale the velocity so that player can't move faster along a diagonal
+    player.body.velocity.normalize().scale(speed);
+
+    // Update the animation last and give left/right animations precedence over up/down animations
+    if (direccion == "left") {
+      remoto.anims.play(nombre+"-left-walk", true);
+    } else if (direccion == "right") {
+      remoto.anims.play(nombre+"-right-walk", true);
+    } else if (direccion == "up") {
+      remoto.anims.play(nombre+"-back-walk", true);
+    } else if (direccion == "down") {
+      remoto.anims.play(nombre+"-front-walk", true);
+    } else {
+      remoto.anims.stop();
+
+      // If we were moving, pick and idle frame to use
+      // if (prevVelocity.x < 0) player.setTexture("gabe", "gabe-left-walk");
+      // else if (prevVelocity.x > 0) player.setTexture("gabe", "gabe-right-walk");
+      // else if (prevVelocity.y < 0) player.setTexture("gabe", "gabe-back-walk");
+      // else if (prevVelocity.y > 0) player.setTexture("gabe", "gabe-front-walk");
+  }
+}
+
+
+  function update(time, delta) {
+    const speed = 175;
+    //const prevVelocity = player.body.velocity.clone();
+
+    const nombre=recursos[ws.numJugador].sprite;
 
     // Stop any previous movement from the last frame
     player.body.setVelocity(0);
@@ -322,7 +481,7 @@ function lanzarJuego(){
       player.anims.play(nombre+"-front-walk", true);
     } else {
       player.anims.stop();
-
+      ws.movimiento(player.body.x,player.body.y);
       // If we were moving, pick and idle frame to use
       // if (prevVelocity.x < 0) player.setTexture("gabe", "gabe-left-walk");
       // else if (prevVelocity.x > 0) player.setTexture("gabe", "gabe-right-walk");
