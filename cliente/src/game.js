@@ -394,51 +394,30 @@ function lanzarJuego(){
     }
   }
 
-  function moverRemoto(direccion,nick,numJugador){
+  function moverRemoto(direccion,nick,numJugador,x,y){
     var remoto = jugadores[nick];
     const speed = 175;
     const prevVelocity = player.body.velocity.clone();
 
     const nombre=recursos[numJugador].sprite;
-
-    // Stop any previous movement from the last frame
-    remoto.body.setVelocity(0);
-    //player2.body.setVelocity(0);
-
-    // Horizontal movement
-    if (direccion == "left") {
-      remoto.body.setVelocityX(-speed);
-    } else if (direccion == "right") {
-      remoto.body.setVelocityX(speed);
-    }
-
-    // Vertical movement
-    if (direccion == "up") {
-      remoto.body.setVelocityY(-speed);
-    } else if (direccion == "down") {
-      remoto.body.setVelocityY(speed);
-    }
-
-    // Normalize and scale the velocity so that player can't move faster along a diagonal
-    player.body.velocity.normalize().scale(speed);
-
-    // Update the animation last and give left/right animations precedence over up/down animations
-    if (direccion == "left") {
-      remoto.anims.play(nombre+"-left-walk", true);
-    } else if (direccion == "right") {
-      remoto.anims.play(nombre+"-right-walk", true);
-    } else if (direccion == "up") {
-      remoto.anims.play(nombre+"-back-walk", true);
-    } else if (direccion == "down") {
-      remoto.anims.play(nombre+"-front-walk", true);
-    } else {
-      remoto.anims.stop();
-
-      // If we were moving, pick and idle frame to use
-      // if (prevVelocity.x < 0) player.setTexture("gabe", "gabe-left-walk");
-      // else if (prevVelocity.x > 0) player.setTexture("gabe", "gabe-right-walk");
-      // else if (prevVelocity.y < 0) player.setTexture("gabe", "gabe-back-walk");
-      // else if (prevVelocity.y > 0) player.setTexture("gabe", "gabe-front-walk");
+    if (remoto)
+      {
+      remoto.body.setVelocity(0);
+      remoto.setX(x);
+      remoto.setY(y);
+      remoto.body.velocity.normalize().scale(speed);
+      if (direccion=="left") {
+        remoto.anims.play(nombre+"-left-walk", true);
+      } else if (direccion=="right") {
+        remoto.anims.play(nombre+"-right-walk", true);
+      } else if (direccion=="up") {
+        remoto.anims.play(nombre+"-back-walk", true);
+      } else if (direccion=="down") {
+        remoto.anims.play(nombre+"-front-walk", true);
+      } else {
+        remoto.anims.stop();
+      }
+     
   }
 }
 
