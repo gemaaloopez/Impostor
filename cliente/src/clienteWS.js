@@ -133,7 +133,7 @@ function ClienteWS(){
 	this.ini();
 }
 
-function pruebasWS(codigo){
+function pruebasWS(){
 	var ws2=new ClienteWS();
 	var ws3=new ClienteWS();
 	var ws4=new ClienteWS();
