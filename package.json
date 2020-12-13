@@ -1,17 +1,19 @@
 {
   "name": "impostor",
   "version": "1.0.0",
-  "description": "",
+  "description": "Juego del impostor-Procesos",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/.bin/jasmine-node servidor",
-	"start": "node index.js"
+    "test": "./node_modules/.bin/jasmine-node servidor"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gemaaloopez/Impostor.git"
   },
-  "author": "",
+  "keywords": [
+    "juego"
+  ],
+  "author": "Gema López",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/gemaaloopez/Impostor/issues"
