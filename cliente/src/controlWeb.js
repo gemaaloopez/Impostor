@@ -106,7 +106,6 @@ function ControlWeb($){
 	  		cadena=cadena+'<li value="'+lista[i].nick+'" class="list-group-item">'+lista[i].nick+'</li>';
 	  	}
 		cadena=cadena+'</div>';
-		//<input width="30" height="30" type="image" id="btnRefrescar" src="cliente/img/refresh.png" />
 		cadena=cadena+'</div>';
 
 		$('#uniendo').append(cadena);
@@ -115,8 +114,80 @@ function ControlWeb($){
 	this.actualizarJugadores=function(){
 		ws.listarParticipantes();
 	}
+
+	this.actualizarPartidas=function(){
+		ws.listaPartidasDisponibles();
+	}
 	this.limpiarLog=function(){
 		$('#esperando').remove();
 		$('#uniendo').remove();
 	}
+    this.limpiarJuego=function(){
+		$('#mostrarRE').remove();
+		$('#game-container').remove();
+		var cadena='<div id="mostrarRE">';
+		cadena=cadena+'<button type="button" id="btnReiniciar" class="btn btn-primary">REINICIAR</button>';
+		cadena=cadena+'</div>';
+		$('#bloqueCentral').append(cadena);
+
+		$('#btnReiniciar').on('click',function(){
+			location.reload();
+			return false;
+		});
+	}
+
+	this.mostrarModalSimple=function(msg){
+		this.limpiarModal();
+		var cadena="<p id='avisarImpostor'>"+msg+'</p>';
+		$('#contenidoModal').append(cadena);
+		$("#pie").append('<button type="button" id="cerrar" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>');
+		$('#modalGeneral').modal("show");
+	}
+
+	this.mostrarModalTarea=function(cadenaTarea){
+		this.limpiarModal();
+		var cadena="<p id='tarea'>"+cadenaTarea+'</p>';
+		$('#contenidoModal').append(cadena);
+		$("#pie").append('<button type="button" id="cerrar" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>');
+		$('#modalGeneral').modal("show");
+	}
+
+	this.mostrarModalVotacion=function(lista){
+		this.limpiarModal();
+		var cadena = '<div id="votacion"><h3>Votacion</h3>';
+		cadena=cadena+'<div class="input-group">';
+		for(var i=0;i<lista.length;i++){
+	  		cadena=cadena+'<div><input type="radio" name="optradio" value="'+lista[i].nick+'">'+lista[i].nick+'</div>';
+	  	}
+	  	cadena=cadena+'<div><input type="radio" name="optradio" value="-1">Saltar voto</div>'
+		cadena=cadena+'</div>';
+		$('#contenidoModal').append(cadena);
+		$("#pie").append('<button type="button" id="votar" class="btn btn-secondary">Votar</button>');
+		$('#modalGeneral').modal("show");
+
+		var sospechoso=undefined;
+		$('.input-group input').on('change', function() {
+		   sospechoso=$('input[name=optradio]:checked', '.input-group').val();
+		});
+
+		$('#votar').on('click',function(){
+			if(sospechoso!=-1){
+				ws.votar(sospechoso);
+			}
+			else{
+				ws.saltarVoto();
+			}
+		});
+	}
+
+	this.limpiarModal=function(){
+		$('#avisarImpostor').remove();
+		$('#tarea').remove();
+		$("#cerrar").remove();
+		$("#votacion").remove();
+		$("#votar").remove();
+	}
+
+
+
 }

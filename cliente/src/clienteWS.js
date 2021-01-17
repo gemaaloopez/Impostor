@@ -50,9 +50,13 @@ function ClienteWS(){
 	this.movimiento=function(x,y){
 		this.socket.emit("movimiento", this.codigo, this.nick, this.numJugador, x,y);
 	}
+	this.realizarTarea=function(){
+		this.socket.emit("realizarTarea", this.codigo, this.nick, this.encargo);
+	}
 	//servidor WS dentro del cliente
 	this.lanzarSocketSrv=function(){
 		var cli=this;
+
 		this.socket.on('connect', function(){			
 			console.log("conectado al servidor de WS");
 		});
@@ -63,12 +67,14 @@ function ClienteWS(){
 				cw.mostrarEsperandoRival();
 				cw.mostrarIniciarPartida();
 				cli.numJugador=0;
+				cli.estado="vivo";
 			}
 		});
 		this.socket.on('unidoAPartida',function(data){
 			cli.codigo=data.codigo;
 			cli.nick = data.nick;
 			cli.numJugador = data.numJugador;
+			cli.estado="vivo";
 			console.log(data);
 			cw.mostrarEsperandoRival();;
 		});
@@ -94,23 +100,39 @@ function ClienteWS(){
 		this.socket.on('recibirListaPartidas',function(lista){
 			console.log(lista);
 		});
-		this.socket.on('votacion',function(data){
-			console.log(data);
+		this.socket.on('votacion',function(lista){
+			console.log(lista);
+			cw.mostrarModalVotacion(lista);
+
 		});
 		this.socket.on('finalVotacion',function(data){
 			console.log(data);
+			$('#modalGeneral').modal('toggle');
+			cw.mostrarModalSimple("La votacion ha terminado, el elegido es: "+data.elegido+" Fase: "+data.fase);
+
 		});
 		this.socket.on('haVotado',function(data){
 			console.log(data);
 		});
 		this.socket.on('recibirEncargo',function(data){
 			console.log(data);
+			cli.impostor= data.impostor;
+			cli.encargo = data.encargo;
+			if(cli.impostor){
+				cw.mostrarModalSimple('Ahora Tú eres el impostor. Tu objetivo es matar a todos');
+
+			}
 		});
-		this.socket.on('muereInocente',function(data){
-			console.log(data);
+		this.socket.on('muereInocente',function(inocente){
+			console.log('muere'+inocente);
+			if(cli.nick==inocente){
+				cli.estado="muerto";
+			}
+			dibujarMuereInocente(inocente);
 		});
 		this.socket.on('final',function(data){
 			console.log(data);
+			finPartida(data.Ganadores);
 		});
 		this.socket.on('recibirListaParticipantes',function(lista){
 			console.log(lista);
@@ -123,10 +145,19 @@ function ClienteWS(){
 					lanzarJugadorRemoto(lista[i].nick,lista[i].numJugador);
 				}
 			}
+			crearColision();
+		});
+		this.socket.on("realizandoTarea",function(datos){
+			console.log(datos);
 		});
 		this.socket.on('moverRemoto',function(datos){
-			mover(datos.nick,datos.x,datos.y);
-			//moverRemoto()
+			mover(datos);
+		});
+		
+		this.socket.on("hasAtacado",function(fase){
+			if(fase=="jugando"){
+				ataquesOn=true;
+			}
 		});
 	}
 
