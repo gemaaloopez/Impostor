@@ -451,7 +451,7 @@ function Partida(num,owner,codigo, juego){
 	}
 
 	this.agregarUsuario(owner);
-}
+
     this.realizarTarea=function(nick){
 		this.fase.realizarTarea(nick, this);
 	}
@@ -487,10 +487,6 @@ function Partida(num,owner,codigo, juego){
 		total = total/this.numJugadores();
 		return total;
 	}
-
-
-
-
 
 	this.agregarUsuario(owner);
 }
