@@ -146,16 +146,16 @@ function lanzarJuego(){
       anims2.create({
         key: "gema-left-walk",
         frames: anims.generateFrameNames("varios", {
-          start: 60,
-          end: 62,
+          start: 3,
+          end: 5,
         }),
         repeat: -1
       });
       anims2.create({
         key: "gema-right-walk",
         frames: anims.generateFrameNames("varios", {
-          start: 72,
-          end: 74,
+          start: 27,
+          end: 29,
         }),
         repeat: -1
       });
@@ -163,8 +163,8 @@ function lanzarJuego(){
         key: "gema-front-walk",
         frames: anims.generateFrameNames("varios", {
           //prefix: "misa-left-walk.",
-          start: 48,
-          end: 50,
+          start: 3,
+          end: 5,
           //zeroPad: 3
         }),
         //frameRate: 10,
@@ -174,8 +174,8 @@ function lanzarJuego(){
         key: "gema-back-walk",
         frames: anims.generateFrameNames("varios", {
           //prefix: "misa-left-walk.",
-          start: 84,
-          end: 86,
+          start: 39,
+          end: 41,
           //zeroPad: 3
         }),
         //frameRate: 10,
@@ -187,8 +187,8 @@ function lanzarJuego(){
         key: "pepe-left-walk",
         frames: anims.generateFrameNames("varios", {
           //prefix: "misa-left-walk.",
-          start: 15,
-          end: 17,
+          start: 18,
+          end: 20,
           //zeroPad: 3
         }),
         //frameRate: 10,
@@ -199,8 +199,8 @@ function lanzarJuego(){
         key: "pepe-right-walk",
         frames: anims.generateFrameNames("varios", {
           //prefix: "misa-left-walk.",
-          start: 27,
-          end: 29,
+          start: 30,
+          end: 32,
           //zeroPad: 3
         }),
         //frameRate: 10,
@@ -210,8 +210,8 @@ function lanzarJuego(){
         key: "pepe-front-walk",
         frames: anims.generateFrameNames("varios", {
           //prefix: "misa-left-walk.",
-          start: 3,
-          end: 5,
+          start: 6,
+          end: 8,
           //zeroPad: 3
         }),
         //frameRate: 10,
@@ -221,8 +221,8 @@ function lanzarJuego(){
         key: "pepe-back-walk",
         frames: anims.generateFrameNames("varios", {
           //prefix: "misa-left-walk.",
-          start: 39,
-          end: 41,
+          start: 42,
+          end: 44,
           //zeroPad: 3
         }),
         //frameRate: 10,
@@ -233,8 +233,8 @@ function lanzarJuego(){
         key: "pablo-left-walk",
         frames: anims.generateFrameNames("varios", {
           //prefix: "misa-left-walk.",
-          start: 51,
-          end: 53,
+          start: 21,
+          end: 23,
           //zeroPad: 3
         }),
         //frameRate: 10,
@@ -244,8 +244,8 @@ function lanzarJuego(){
         key: "pablo-right-walk",
         frames: anims.generateFrameNames("varios", {
           //prefix: "misa-left-walk.",
-          start: 75,
-          end: 77,
+          start: 33,
+          end: 35,
           //zeroPad: 3
         }),
         //frameRate: 10,
@@ -255,8 +255,8 @@ function lanzarJuego(){
         key: "pablo-front-walk",
         frames: anims.generateFrameNames("varios", {
           //prefix: "misa-left-walk.",
-          start: 51,
-          end: 53,
+          start: 9,
+          end: 11,
           //zeroPad: 3
         }),
         //frameRate: 10,
@@ -266,8 +266,8 @@ function lanzarJuego(){
         key: "pablo-back-walk",
         frames: anims.generateFrameNames("varios", {
           //prefix: "misa-left-walk.",
-          start: 87,
-          end: 89,
+          start: 45,
+          end: 47,
           //zeroPad: 3
         }),
         //frameRate: 10,
@@ -279,8 +279,8 @@ function lanzarJuego(){
         key: "paco-left-walk",
         frames: anims.generateFrameNames("varios", {
           //prefix: "misa-left-walk.",
-          start: 18,
-          end: 20,
+          start: 60,
+          end: 62,
           //zeroPad: 3
         }),
         //frameRate: 10,
@@ -290,8 +290,8 @@ function lanzarJuego(){
         key: "paco-right-walk",
         frames: anims.generateFrameNames("varios", {
           //prefix: "misa-left-walk.",
-          start: 30,
-          end: 32,
+          start: 72,
+          end: 74,
           //zeroPad: 3
         }),
         //frameRate: 10,
@@ -301,19 +301,19 @@ function lanzarJuego(){
         key: "paco-front-walk",
         frames: anims.generateFrameNames("varios", {
           //prefix: "misa-left-walk.",
-          start: 6,
-          end: 8,
+          start: 48,
+          end: 50,
           //zeroPad: 3
         }),
         //frameRate: 10,
         repeat: -1
       });
       anims5.create({
-        key: "rayo-back-walk",
+        key: "paco-back-walk",
         frames: anims.generateFrameNames("varios", {
           //prefix: "misa-left-walk.",
-          start: 42,
-          end: 44,
+          start: 84,
+          end: 86,
           //zeroPad: 3
         }),
         //frameRate: 10,
