@@ -3,6 +3,10 @@ function ClienteWS(){
 	this.nick=undefined;
 	this.codigo=undefined;
 	this.numJugador=undefined;
+	this.owner=false;
+	this.impostor;
+	this.estado;
+	this.encargo;
 
 	this.ini=function(){
 		this.socket=io.connect();
@@ -47,8 +51,8 @@ function ClienteWS(){
 	this.listarParticipantes=function(){
 		this.socket.emit("listarParticipantes", this.codigo);
 	}
-	this.movimiento=function(x,y){
-		this.socket.emit("movimiento", this.codigo, this.nick, this.numJugador, x,y);
+	this.movimiento=function(direccion,x,y){
+		this.socket.emit("movimiento", this.nick, this.codigo, this.numJugador, direccion, x, y);
 	}
 	this.realizarTarea=function(){
 		this.socket.emit("realizarTarea", this.codigo, this.nick, this.encargo);
@@ -61,7 +65,7 @@ function ClienteWS(){
 			console.log("conectado al servidor de WS");
 		});
 		this.socket.on('partidaCreada',function(data){
-			cli.codigo = data.codigo;
+			cli.codigo=data.codigo;
 			console.log(data);
 			if(data.codigo!="Error"){
 				cw.mostrarEsperandoRival();
@@ -72,15 +76,20 @@ function ClienteWS(){
 		});
 		this.socket.on('unidoAPartida',function(data){
 			cli.codigo=data.codigo;
-			cli.nick = data.nick;
-			cli.numJugador = data.numJugador;
+			cli.nick=data.nick;
+			cli.numJugador=data.numJugador;
 			cli.estado="vivo";
 			console.log(data);
-			cw.mostrarEsperandoRival();;
+			if(data.nickJugador != "fallo" && data.codigo != null) {
+			cw.mostrarEsperandoRival();
+			}
 		});
 		this.socket.on('nuevoJugador',function(nick){
 			console.log(nick+" se une a la partida");
 			cw.actualizarJugadores();
+		});
+		this.socket.on('esperando',function(fase){
+			console.log("esperando: "+fase);
 		});
 		this.socket.on('partidaIniciada',function(fase){
 			console.log("Partida está en fase: "+fase);
@@ -88,9 +97,7 @@ function ClienteWS(){
 			cw.limpiarLog();
 			cli.obtenerEncargo();
 		});
-		this.socket.on('esperando',function(fase){
-			console.log("esperando: "+fase);
-		});
+		
 		this.socket.on('recibirListaPartidasDisponibles',function(lista){
 			console.log(lista);
 			if (!cli.codigo){
@@ -100,11 +107,16 @@ function ClienteWS(){
 		this.socket.on('recibirListaPartidas',function(lista){
 			console.log(lista);
 		});
-		this.socket.on('votacion',function(lista){
-			console.log(lista);
-			cw.mostrarModalVotacion(lista);
-
-		});
+		 
+        this.socket.on('votacion',function(lista){
+	
+                        console.log(lista);	
+                        console.log(lista);
+                        if(fase=="votacion"){
+                     
+                            $('#avisarVotacion').modal("show");		
+                        }	
+        });
 		this.socket.on('finalVotacion',function(data){
 			console.log(data);
 			$('#modalGeneral').modal('toggle');
@@ -128,7 +140,7 @@ function ClienteWS(){
 			if(cli.nick==inocente){
 				cli.estado="muerto";
 			}
-			dibujarMuereInocente(inocente);
+			dibujarInocenteMuerto(inocente);
 		});
 		this.socket.on('final',function(data){
 			console.log(data);
@@ -147,13 +159,12 @@ function ClienteWS(){
 			}
 			crearColision();
 		});
-		this.socket.on("realizandoTarea",function(datos){
-			console.log(datos);
+		this.socket.on("tareaRealizada",function(data){
+			console.log(data);
 		});
-		this.socket.on('moverRemoto',function(datos){
-			mover(datos);
+		this.socket.on('moverRemoto',function(data){
+			mover(data);
 		});
-		
 		this.socket.on("hasAtacado",function(fase){
 			if(fase=="jugando"){
 				ataquesOn=true;

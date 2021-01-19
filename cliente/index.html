@@ -3,7 +3,7 @@
 <head>
 	<title>Impostor</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
+	<script src="//cdn.jsdelivr.net/npm/phaser@3.16.2/dist/phaser.js"></script>
 	<link rel="stylesheet" href="cliente/lib/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="cliente/lib/bootstrap.min.js"></script>
@@ -13,13 +13,13 @@
 	<script src="cliente/src/clienteRest.js"></script>
 	<script src="cliente/src/clienteWS.js"></script>
 	<script src="cliente/src/controlWeb.js"></script>
-	<script type="cliente/src/game.js"></script>
+	<script src="cliente/src/game.js"></script>
+
 </head>
-<body>
 <body style="background-color:pink">
 <div class="container">
 
-	<h1 <FONT FACE="impact" SIZE=6 COLOR="blue" style="text-align:center">
+	<h1> <FONT FACE="impact" SIZE=6 COLOR="blue" style="text-align:center">
 	Impostor App</FONT> </h1>
 	<img id="encabezado" src='cliente/img/Captura.JPG' class='img-responsive center-block'>
 	&nbsp;
@@ -38,33 +38,102 @@
   		<div id="game-container"></div>
   	</div>
 </div>
+	<div class="row">
+  		<div class="col-sm-6" id="esperando"> </div>
+  		<div class="col-sm-6" id="uniendo"> </div>
+  	</div>
+  	<div class="row">
+  		<div id="game-container"></div>
+  	</div>
+</div>
+
+
+
 <div class="modal" id="modalGeneral" tabindex="-1" role="dialog">
-		  <div class="modal-dialog" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title">ImpostorApp</h5>
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-		          <span aria-hidden="true">&times;</span>
-		        </button>
-		      </div>
-		      <div class="modal-body" id="contenidoModal">
-		      </div>
-		      <div class="modal-footer" id="pie">
-		        <!--<button type="button" class="btn btn-primary">Save changes</button>-->		        
-		      </div>
-		    </div>
-		  </div>
-		</div>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 style="color:white"><b>Impostor app</b></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="contenidoModal">
+      </div>
+      <div class="modal-footer" id="pie">
+        <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+        <button type="button" id="cerrar" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" id="avisarVotacion" tabindex="-1" role="dialog">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Votacion</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p>Aquí iría la votacion</p>
+			</div>
+			<div class="modal-footer">
+				<!--<button type="button" class="btn btn-primary">Save changes</button>-->
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+			</div>
+	    </div>
 	  </div>
 	</div>
+
+	<div class="modal" id="avisarFinalCiudadanos" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+				    <h5 class="modal-title">LA PARTIDA ESTA TERMINADA</h5>
+				    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				    	<span aria-hidden="true">&times;</span>
+				    </button>
+				</div>
+				<div class="modal-body">
+			    	<p>GANAN LOS CIUDADANOSS</p>
+				</div>
+				<div class="modal-footer">
+				    <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+				    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
 	</div>
 
+	<div class="modal" id="avisarFinalImpostores" tabindex="-1" role="dialog">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title">LA PARTIDA ESTA TERMINADA</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body">
+	        <p>GANAN LOS IMPOSTORES</p>
+	      </div>
+	      <div class="modal-footer">
+	        <!--<button type="button" class="btn btn-primary">Save changes</button>-->
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 
 <script>
 		var rest= new ClienteRest();
 		var ws= new ClienteWS();
 		var cw=new ControlWeb($);
-		cw.mostrarCrearPartida();
+		cw.mostrarCrearPartida(4);
 		ws.listaPartidasDisponibles();
 </script>
 </body>

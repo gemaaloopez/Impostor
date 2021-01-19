@@ -19,80 +19,83 @@ function ControlWeb($){
 		$('#btnCrear').on('click',function(){
 			var nick=$('#nick').val();
 			var num=$("#num").val();
-			$("#mostrarCP").hide();
-			if(nick != ""){
+			if(nick != "" && num !=""){
+				$("#mUAP").remove();
+				$("#mostrarCP").remove();
 				ws.crearPartida(nick,num);
-			}else{
-				$("#mostrarCP").show();
 			}
-			//mostrarEsperandoRival
 		});
 	}
-	this.limpiar=function(){
-		$('#encabezado').remove();
-		$('#mUAP').remove();
-		$("#mostrarCP").remove();
-	}
 
-	this.mostrarEsperandoRival=function(){
+	this.mostrarEsperandoRival=function(lista){
 		$('#mER').remove();
-		var cadena="<div id='mER'>";
+		var cadena='<div id="mER"><h3>Esperando rival</h3>';
 		cadena=cadena+"<img src='cliente/img/loading.gif' class='img-responsive center-block'>";
 		cadena=cadena+"</div>";
-		this.limpiar();
+
+		if(ws.owner){
+			cadena= cadena+ '<div>';
+			cadena= cadena+ '<button type="button" class="btn btn-success" id="btnComenzar">INICIAR PARTIDA</button>';
+		}
+		cadena=cadena+"</div>";
 		$('#esperando').append(cadena);
-		ws.listarParticipantes();
+
+		$('#btnComenzar').on('click', function(){
+			nick= ws.nick;
+			codigo=ws.codigo;
+			ws.iniciarPartida(nick,codigo);
+			ws.listarParticipantes();
+		});
 	}
 
 	this.mostrarUnirAPartida=function(lista){
 		$('#mUAP').remove();
 		var cadena='<div id="mUAP">';
 		cadena=cadena+'<h3>Unirse a una Partida</h3>';
-		cadena=cadena+'<div class="list-group">';
+		cadena=cadena+ '<div class="list-group">';
 		for(var i=0;i<lista.length;i++){
 			var maximo=lista[i].maximo
 			var numJugadores=maximo-(lista[i].huecos)
-	  		cadena=cadena+'<a href="#" value="'+lista[i].codigo+'" class="list-group-item">'+lista[i].codigo+' Host: '+lista[i].owner+' <span class="badge">'+numJugadores+'/'+maximo+'</span></a>';
-	  	}
-		cadena=cadena+'</div>';
-		cadena=cadena+'<button type="button" id="btnUnir" class="btn btn-primary">Unir a Partida</button>';
-		cadena=cadena+'</div>';
+ 			cadena=cadena+'<a href="#" value=" ' +lista[i].codigo+ ' " class="list-group-item">'+lista[i].codigo+'Host: '+lista[i].owner+' <span class="badge">'+numJugadores+'/'+maximo+'</span></a>';
+ 		}
+ 		cadena=cadena+'</div>';//cierra listGruop
+ 		cadena=cadena+ '<button type="button" id="btnUnir" class="btn btn-primary">Unir a Partida</button>';
+ 		cadena=cadena+'</div>';//cierra mUAP
 
+ 		$('#unirAPartida').append(cadena);
 
-		$('#unirAPartida').append(cadena);
-
-		var StoreValue = [];
+ 		 var StoreValue = []; //Declare array
 	    $(".list-group a").click(function(){
-	        StoreValue = [];
+	        StoreValue = []; //clear array
 	        StoreValue.push($(this).attr("value")); // add text to array
 	    });
 
 
-		$('#btnUnir').on('click',function(){
-			var nick=$('#nick').val();
-			var codigo=StoreValue[0];
-			$("#mUAP").remove();
-			if(codigo!=undefined && nick!=""){
+ 		 $('#btnUnir').on('click',function(){
+		  	var nick=$('#nick').val();
+		  	var codigo=StoreValue[0];
+		  	
+		  	if(codigo!=null && nick!=""){
+		  		$("#mUAP").remove();
+		  		$('#mostrarCP').remove();
 				ws.unirAPartida(codigo,nick);
 			}
 			else{
 				ws.listaPartidasDisponibles();
 			}
-			
-		
-		});
+		  });
 	}
 
 	this.mostrarIniciarPartida=function(){
 		$('#mIP').remove();
-		var cadena='<div id="mostrarIP">';
+		var cadena='<div id="mostrarlaIP">';
 		cadena=cadena+'</div>';
-		cadena=cadena+'<button type="button" id="btnIniciar" class="btn btn-primary">Iniciar Partida</button>';
+		cadena=cadena+'<button type="button" id="btnComenzar" class="btn btn-primary">Iniciar la Partida</button>';
 		cadena=cadena+'</div>';
 
 		$('#esperando').append(cadena);
 
-		$('#btnIniciar').on('click',function(){
+		$('#btnComenzar').on('click',function(){
 			ws.iniciarPartida();
 		});
 	}
@@ -187,7 +190,5 @@ function ControlWeb($){
 		$("#votacion").remove();
 		$("#votar").remove();
 	}
-
-
 
 }
