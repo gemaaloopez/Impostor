@@ -1,0 +1,15 @@
+
+.uno{
+	border: 2px solid pink;
+	width: 200px;
+	height: 100px;
+	overflow: hidden;
+	float: center;
+}
+
+.dos{
+	border: 2px solid white;
+	width: 150px;
+	height: 100px;
+	float: right;
+}
