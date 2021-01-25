@@ -31,7 +31,8 @@ function ServidorWS(){
 		    	socket.join(codigo);
 		    	console.log('codigo', codigo)
 		    	console.log('nick', nick)
-		    	console.log('juego', JSON.stringify(juego))
+		    	console.log('juego', juego)
+		    	console.log('juego partidas', juego.partidas)
 		    	var owner=juego.partidas[codigo].nickOwner;
 		  		console.log("Usuario "+res.nick+" se une a partida "+res.codigo);
 		    	cli.enviarRemitente(socket,"unidoAPartida",res);
