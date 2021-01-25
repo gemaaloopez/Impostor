@@ -29,6 +29,9 @@ function ServidorWS(){
 		    	//nick o codigo nulo
 		    	var res=juego.unirAPartida(codigo,nick);
 		    	socket.join(codigo);
+		    	console.log('codigo', codigo)
+		    	console.log('nick', nick)
+		    	console.log('juego', JSON.stringify(juego))
 		    	var owner=juego.partidas[codigo].nickOwner;
 		  		console.log("Usuario "+res.nick+" se une a partida "+res.codigo);
 		    	cli.enviarRemitente(socket,"unidoAPartida",res);
